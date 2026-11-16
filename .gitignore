@@ -1,0 +1,22 @@
+# 빌드 결과물
+target/
+bin/
+out/
+*.class
+*.war
+
+# 개인 설정 (각자 PC마다 다름)
+.vscode/settings.json
+.idea/
+*.iml
+.settings/
+.classpath
+.project
+
+# 비밀 정보 — 절대 올리지 않기
+.env
+*.key
+
+# OS
+.DS_Store
+Thumbs.db

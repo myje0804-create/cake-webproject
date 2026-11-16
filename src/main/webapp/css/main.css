@@ -1,0 +1,238 @@
+/* =========================================================
+   main.css — 메인 화면(index.jsp) 전용
+   ========================================================= */
+
+/* ---------- 1. 배너 ---------- */
+.banner {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+  border-bottom: 1.5px solid var(--ink);
+  background: var(--pink);
+}
+.banner-track { position: relative; height: 100%; }
+
+.banner-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .6s ease;
+  /* 사진이 없을 때 보이는 기본 배경 */
+  background: linear-gradient(135deg, #F8D9CF, #FBEBD9 55%, #F3E2C7);
+}
+.banner-slide.active { opacity: 1; visibility: visible; }
+
+.banner-slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* 사진 위 글씨가 잘 보이게 살짝 어둡게 */
+.banner-slide img + .banner-text { text-shadow: 0 2px 12px rgba(0,0,0,.35); color: #fff; }
+
+.banner-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 72px;
+  text-align: center;
+  color: var(--ink);
+}
+.banner-eyebrow {
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.banner-title {
+  font-family: var(--font-hand);
+  font-size: clamp(44px, 8vw, 88px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--orange);
+  text-wrap: balance;
+}
+.banner-desc { font-size: 16px; }
+
+/* 좌우 버튼 */
+.banner-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: rgba(255,255,255,.85);
+  font-size: 16px;
+  color: var(--ink);
+  z-index: 2;
+}
+.banner-arrow:hover { background: #fff; }
+.banner-arrow.prev { left: 20px; }
+.banner-arrow.next { right: 20px; }
+
+/* 아래 점 */
+.banner-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+.banner-dots button {
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: #fff;
+}
+.banner-dots button.active { background: var(--ink); }
+
+/* ---------- 2. Best Design ---------- */
+.best { padding-block: 56px 24px; }
+
+.best-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.cake-card { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.cake-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  background: var(--line);
+}
+.cake-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+.cake-card:hover .cake-thumb img { transform: scale(1.05); }
+
+.best-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  font-family: var(--font-hand);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--orange);
+  text-shadow: 0 0 6px rgba(255,255,255,.9);
+}
+.cake-name { margin-top: 10px; font-weight: 700; font-size: 16px; }
+.cake-price { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+.center-btn { margin-top: 32px; text-align: center; }
+
+/* ---------- 3. ⑦ 커스텀 주문 방법 ---------- */
+.howto {
+  margin-top: 56px;
+  padding-block: 56px;
+  border-top: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  background: var(--paper);
+}
+
+.howto-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  counter-reset: none;
+}
+.howto-steps li {
+  position: relative;
+  padding: 24px 20px;
+  border: 1.5px dashed var(--ink);
+  border-radius: var(--radius);
+  background: var(--cream);
+}
+.howto-steps h3 { margin: 10px 0 6px; font-size: 17px; }
+.howto-steps p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+.step-no {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: #fff;
+  font-family: var(--font-hand);
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.howto-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* ---------- 4. ⑧ 고객 후기 ---------- */
+.reviews { padding-block: 56px 0; }
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.review-card {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  overflow: hidden;
+}
+.review-photo {
+  aspect-ratio: 4 / 3;
+  max-width: 100%;
+  background: var(--line);
+  border-bottom: 1.5px solid var(--ink);
+}
+.review-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.review-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.review-stars { color: var(--line); font-size: 18px; letter-spacing: 2px; }
+.review-stars .on { color: var(--orange); }
+.review-cake { font-weight: 700; }
+.review-text { margin: 4px 0; font-size: 14px; color: var(--ink-soft); }
+.review-writer { font-size: 13px; color: var(--ink-soft); margin-top: auto; }
+
+/* ---------- 휴대폰·태블릿 ---------- */
+@media (max-width: 900px) {
+  .howto-steps { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 760px) {
+  .banner { height: 320px; }
+  .banner-text { padding: 0 56px; }
+  .banner-arrow { width: 36px; height: 36px; }
+  .banner-arrow.prev { left: 10px; }
+  .banner-arrow.next { right: 10px; }
+  .best-grid, .review-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+  .howto-steps { grid-template-columns: 1fr; }
+}
