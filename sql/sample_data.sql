@@ -1,13 +1,13 @@
 -- =========================================================
 -- 시연용 예시 데이터 (schema.sql 실행 후 실행)
 -- 관리자 계정: admin / admin1234   일반 계정: yeji / 1234
--- ※ 비밀번호 암호화를 붙이면 이 값도 바꿔야 함
+-- ※ 비밀번호는 SHA-256으로 바꾼 값을 저장함 (PasswordUtil.java)
 -- =========================================================
 USE minecake;
 
 INSERT INTO member (login_id, password, name, phone, role) VALUES
-('admin', 'admin1234', '관리자', '010-0000-0000', 'ADMIN'),
-('yeji',  '1234',      '문예지', '010-1111-1111', 'USER');
+('admin', 'ac9689e2272427085e35b9d3e3e8bed88cb3434828b43b86fc0596cad4c6e270', '관리자', '010-0000-0000', 'ADMIN'),
+('yeji',  '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', '문예지', '010-1111-1111', 'USER');
 
 INSERT INTO product (type, category, name, price, description, image_url, is_best) VALUES
 ('CAKE', 'CHARACTER', '리락쿠마 케이크',     21000, '하트 시트 위 곰돌이 캐릭터 케이크', '/images/cakes/best1.jpg', TRUE),

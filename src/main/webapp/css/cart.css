@@ -1,1 +1,128 @@
-/* cart.css — 역할 B 담당 화면 전용 스타일. 색·폰트는 common.css 변수(var(--orange) 등)만 사용 */
+/* =========================================================
+   cart.css — 장바구니 화면 (역할 B)
+   색·폰트는 common.css 변수만 사용
+   ========================================================= */
+.cart-page { padding-block: 56px; }
+
+.cart-toast {
+  max-width: 520px;
+  margin: 0 auto 24px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #E8F5EC;
+  color: #1F6B41;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+.cart-toast-error { background: #FCEDEB; color: #A3352C; }
+
+/* 빈 장바구니 */
+.cart-empty {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  border: 1.5px dashed var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  text-align: center;
+}
+.cart-empty-title { margin: 0 0 4px; font-family: var(--font-hand); font-size: 30px; font-weight: 700; }
+.cart-empty p { color: var(--ink-soft); margin: 0 0 20px; }
+
+/* 목록 + 요약 */
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+.cart-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 18px;
+  padding: 16px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+.cart-thumb {
+  width: 110px;
+  aspect-ratio: 1;
+  max-width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--line);
+}
+.cart-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+.cart-info { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.cart-name { font-size: 17px; font-weight: 700; }
+.cart-name:hover { color: var(--orange-dark); }
+.cart-info p { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.cart-options { color: var(--ink-soft); }
+.cart-lettering { font-family: var(--font-hand); font-size: 19px !important; color: var(--orange-dark); }
+.cart-lettering span, .cart-request span {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--ink-soft);
+  vertical-align: middle;
+}
+.cart-request { color: var(--ink-soft); }
+.cart-unit { margin-top: auto !important; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+.cart-actions { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 10px; }
+
+.qty-form { display: flex; align-items: center; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
+.qty-btn { width: 34px; height: 34px; border: 0; background: var(--paper); font-size: 18px; color: var(--ink); }
+.qty-btn:hover { background: var(--cream); }
+.qty-input {
+  width: 40px; height: 34px; border: 0; text-align: center;
+  font: inherit; font-weight: 700; background: var(--paper); color: var(--ink);
+  -moz-appearance: textfield;
+}
+.qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+.cart-line-total { margin: 0; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.delete-btn { border: 0; background: none; color: var(--ink-soft); font-size: 13px; text-decoration: underline; padding: 0; }
+.delete-btn:hover { color: #C2453B; }
+
+/* 결제 요약 */
+.cart-summary {
+  position: sticky;
+  top: 88px;
+  padding: 22px 20px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cart-summary h2 { margin: 0 0 6px; font-size: 17px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-soft); }
+.summary-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin: 6px 0 8px; padding-top: 12px; border-top: 1px solid var(--line);
+}
+.summary-total strong { font-size: 24px; color: var(--orange-dark); font-variant-numeric: tabular-nums; }
+.summary-note { margin: 4px 0 0; font-size: 12px; color: var(--ink-soft); text-align: center; }
+.btn-block { display: block; width: 100%; text-align: center; }
+
+@media (max-width: 860px) {
+  .cart-layout { grid-template-columns: 1fr; }
+  .cart-summary { position: static; }
+}
+@media (max-width: 560px) {
+  .cart-item { grid-template-columns: 80px 1fr; }
+  .cart-thumb { width: 80px; }
+  .cart-actions { grid-column: 1 / -1; flex-direction: row; align-items: center; }
+}

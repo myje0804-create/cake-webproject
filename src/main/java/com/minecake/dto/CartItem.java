@@ -6,6 +6,7 @@ public class CartItem {
     private int memberId;
     private int productId;
     private String productName;   // 화면 표시용
+    private String imageUrl;   // 화면 표시용 (product 테이블에서 같이 가져옴)
     private String options;   // 선택 옵션 요약
     private String lettering;
     private String request;   // 요청사항
@@ -25,6 +26,12 @@ public class CartItem {
 
     public String getProductName() { return productName; }
     public void setProductName(String productName) { this.productName = productName; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    /** 이 항목의 합계 = 1개 가격 × 수량 */
+    public int getLineTotal() { return price * quantity; }
 
     public String getOptions() { return options; }
     public void setOptions(String options) { this.options = options; }
