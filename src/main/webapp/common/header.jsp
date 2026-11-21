@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="com.minecake.dto.Member, com.minecake.util.HtmlUtil" %>
 <%--
   header.jsp — 모든 페이지 맨 위에 붙는 공통 메뉴
   사용법: <jsp:include page="/common/header.jsp" />
@@ -7,10 +8,12 @@
 <%
     String ctx = request.getContextPath();
 
-    // 로그인 여부: 로그인 성공 시 MemberServlet에서 session.setAttribute("loginUser", 회원객체) 할 예정
-    boolean isLogin = (session.getAttribute("loginUser") != null);
+    // 로그인 정보: 로그인 성공 시 MemberServlet이 세션에 "loginUser"(Member)를 넣어 둠
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    boolean isLogin = (loginUser != null);
+    boolean isAdmin = isLogin && "ADMIN".equals(loginUser.getRole());
 
-    // 장바구니 개수: CartServlet에서 session.setAttribute("cartCount", 개수) 할 예정
+    // 장바구니 개수: 로그인·담기·삭제할 때 MemberServlet/CartServlet이 "cartCount"를 갱신
     Integer cartCount = (Integer) session.getAttribute("cartCount");
     if (cartCount == null) cartCount = 0;
 %>
@@ -47,7 +50,7 @@
         <span class="sr-only"><%= isLogin ? "마이페이지" : "로그인" %></span>
       </a>
 
-      <a href="<%= ctx %>/cart/cart.jsp" class="icon-btn" title="장바구니">
+      <a href="<%= ctx %>/cart" class="icon-btn" title="장바구니">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 8h14l-1 13H6L5 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
           <path d="M9 8V6a3 3 0 0 1 6 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/>
@@ -59,7 +62,11 @@
       </a>
 
       <% if (isLogin) { %>
-        <a href="<%= ctx %>/member/logout" class="logout-link">로그아웃</a>
+        <span class="hello"><%= HtmlUtil.escape(loginUser.getName()) %>님</span>
+        <% if (isAdmin) { %>
+          <a href="<%= ctx %>/admin/dashboard.jsp" class="logout-link">관리자</a>
+        <% } %>
+        <a href="<%= ctx %>/member?action=logout" class="logout-link">로그아웃</a>
       <% } %>
     </div>
   </div>

@@ -24,9 +24,13 @@ AI 기반 맞춤 추천 커스텀 케이크 주문 사이트
 2. MySQL Workbench에서 `sql/schema.sql` → `sql/sample_data.sql` 순서로 실행
 3. `src/main/java/com/minecake/util/DBUtil.java`의 비밀번호를 내 MySQL 비밀번호로 수정
    (⚠ 이 수정은 커밋하지 않기)
-4. 터미널에서 `mvn package` → `target/cake-webproject.war` 생성
-5. VS Code 왼쪽 **SERVERS** 탭 → Tomcat 추가 → war 배포 → 서버 시작
-6. 브라우저에서 `http://localhost:8080/cake-webproject/` 접속
+4. Tomcat 10.1 zip을 `C:\tomcat\apache-tomcat-10.1.xx`에 풀기 (경로에 한글 X)
+5. VS Code 터미널에서 `build.bat` 실행 → Java 코드가 `WEB-INF/classes`로 컴파일됨
+   (`.java` 파일을 고칠 때마다 다시 실행)
+6. VS Code **SERVERS** 탭 → Tomcat 등록 → Add Deployment → Exploded → `src/main/webapp` 폴더 선택 → Start Server
+7. 브라우저에서 `http://localhost:8080/webapp/` 접속
+
+※ 11/21 이전에 `sample_data.sql`을 실행했다면 `sql/update_password_sha256.sql`을 한 번 실행 (비밀번호 암호화 반영)
 
 시연 계정: 관리자 `admin / admin1234`, 일반 `yeji / 1234`
 
@@ -72,13 +76,19 @@ cake-webproject/
 
 ---
 
-## 👥 역할 분담 (이름은 회의 후 기입)
+## 👥 역할 분담
 
 | 역할 | 담당 | 맡는 화면·파일 |
 |---|---|---|
-| **A** 상품 · 커스텀 | | ③ 메인 케이크, ④ 추가 상품, ⑦ 커스텀 주문, 메인 화면 / `CakeServlet`, `MainServlet`, `ProductDAO` |
-| **B** 회원 · 주문 | | ⑤ 회원, ⑥ 장바구니·결제, ⑧ 후기 / `MemberServlet`, `CartServlet`, `OrderServlet`, `ReviewServlet` |
-| **C** 관리자 · AI | | ① AI 케이크, ② 고객센터, 관리자 화면 / `AiServlet`, `GemmaClient`, `admin/*` |
+| **A** 상품 · 커스텀 | 전소은 | ③ 메인 케이크, ④ 추가 상품, ⑦ 커스텀 주문 / `CakeServlet`, `ProductDAO` |
+| **B** 공통 화면 · 회원 · 주문 | 문예지 (팀장) | 메인 화면·header·footer, ⑤ 회원, ⑥ 장바구니·결제, ⑧ 후기 / `MainServlet`, `MemberServlet`, `CartServlet`, `OrderServlet`, `ReviewServlet`, `OptionDAO` |
+| **C** 관리자 · AI | 정선우 | ① AI 케이크, ② 고객센터, 관리자 화면 / `AiServlet`, `GemmaClient`, `admin/*` |
+
+### 🔗 팀원끼리 맞춰 쓰는 이름
+
+- 로그인 정보: 세션 `loginUser` (`Member` 객체, 관리자는 `role = "ADMIN"`)
+- 장바구니 담기 폼: `POST /cart` + `action=add`, `productId`, `optionId`(여러 개), `lettering`, `request`, `quantity` (자세한 내용은 `CartServlet.java` 맨 위 주석)
+- 옵션 목록: `new OptionDAO().findAll()`
 
 각 파일 맨 위 주석에 담당 역할(A/B/C)이 적혀 있어요.
 

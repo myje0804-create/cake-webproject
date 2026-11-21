@@ -92,3 +92,6 @@
   .main-nav { order: 3; width: 100%; margin-left: 0; overflow-x: auto; }
   .main-nav a { white-space: nowrap; font-size: 13px; padding: 4px 10px; }
 }
+
+/* 로그인한 사람 이름 */
+.hello { font-size: 13px; font-weight: 700; margin-left: 4px; white-space: nowrap; }

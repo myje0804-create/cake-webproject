@@ -4,6 +4,7 @@ bin/
 out/
 *.class
 *.war
+src/main/webapp/WEB-INF/classes/
 
 # 개인 설정 (각자 PC마다 다름)
 .vscode/settings.json
