@@ -15,32 +15,43 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- * CakeServlet — 상품 목록·상세 (예지)
- *
- * 주소                                   하는 일
- * GET /cake                              케이크 목록 (cake/list.jsp)
- * GET /cake?category=CHARACTER&sort=name  카테고리 + 정렬
- * GET /cake?type=ADDON                   추가 상품 목록 (숫자초·토퍼·칼)
- * GET /cake?id=3                         상품 상세 (cake/detail.jsp)
- *                                        + 사진 여러 장, 원재료·영양성분, 다른 고객 커스텀 사진
- *
- * sort 값: (없음)=추천순, name=이름순, price_asc=낮은 가격순, price_desc=높은 가격순, review=리뷰 많은 순
- */
 @WebServlet("/cake")
 public class CakeServlet extends HttpServlet {
 
-    /** 카테고리: DB 값 → 화면에 보일 이름 (순서대로 탭이 그려짐) */
+    /** 1차 메인 카테고리: DB 값 -> 화면에 보일 이름 */
     public static final Map<String, String> CATEGORIES = new LinkedHashMap<>();
     static {
-        CATEGORIES.put("LETTERING", "레터링");
-        CATEGORIES.put("CHARACTER", "캐릭터");
-        CATEGORIES.put("LUNCHBOX", "도시락");
-        CATEGORIES.put("FLOWER", "플라워");
+        CATEGORIES.put("COUPLE", "커플/기념일");
+        CATEGORIES.put("FRIEND", "친구/우정");
+        CATEGORIES.put("PARENTS", "부모님/효도");
+        CATEGORIES.put("CAREER", "취업/퇴사/입학/졸업");
+        CATEGORIES.put("BIRTHDAY", "생일");
+        CATEGORIES.put("DESIGN", "디자인케이크");
+        CATEGORIES.put("FLOWER", "플라워/앙금");
+        CATEGORIES.put("BITE", "한입케이크");
         CATEGORIES.put("SEASON", "시즌");
     }
 
-    /** 정렬: 값 → 화면에 보일 이름 */
+    /** 2차 시즌 세부 카테고리 (SEASON 선택 시 하단에 노출) */
+    public static final Map<String, String> SEASON_CATEGORIES = new LinkedHashMap<>();
+    static {
+        SEASON_CATEGORIES.put("SEASON_CHRISTMAS", "크리스마스");
+        SEASON_CATEGORIES.put("SEASON_TEACHER", "스승의날");
+        SEASON_CATEGORIES.put("SEASON_VALENTINE", "발렌타인데이 / 화이트데이");
+        SEASON_CATEGORIES.put("SEASON_CHILDRENS", "어린이날");
+        SEASON_CATEGORIES.put("SEASON_HOLIDAY", "명절 (설날 / 추석)");
+        SEASON_CATEGORIES.put("SEASON_NEWYEAR", "연말 / 새해 (해피뉴이어)");
+    }
+
+    /** 전체 카테고리 이름 조회용 헬퍼 */
+    public static String getCategoryLabel(String code) {
+        if (code == null) return null;
+        if (CATEGORIES.containsKey(code)) return CATEGORIES.get(code);
+        if (SEASON_CATEGORIES.containsKey(code)) return "시즌 · " + SEASON_CATEGORIES.get(code);
+        return null;
+    }
+
+    /** 정렬: 값 -> 화면에 보일 이름 */
     public static final Map<String, String> SORTS = new LinkedHashMap<>();
     static {
         SORTS.put("", "추천순");
@@ -73,9 +84,10 @@ public class CakeServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
         String type = "ADDON".equals(req.getParameter("type")) ? "ADDON" : "CAKE";
 
-        // 정해진 값만 받기 (이상한 값이 오면 '전체' / '추천순'으로)
         String category = req.getParameter("category");
-        if (!"CAKE".equals(type) || category == null || !CATEGORIES.containsKey(category)) category = "";
+        boolean validCategory = category != null && (CATEGORIES.containsKey(category) || SEASON_CATEGORIES.containsKey(category));
+        if (!"CAKE".equals(type) || !validCategory) category = "";
+
         String sort = req.getParameter("sort");
         if (sort == null || !SORTS.containsKey(sort)) sort = "";
 
@@ -93,7 +105,6 @@ public class CakeServlet extends HttpServlet {
         try {
             product = productDAO.findById(Integer.parseInt(idText.trim()));
         } catch (NumberFormatException ignore) {
-            // 숫자가 아니면 없는 상품으로 처리
         }
         if (product == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, "없는 상품이에요.");
@@ -101,9 +112,9 @@ public class CakeServlet extends HttpServlet {
         }
         int productId = product.getProductId();
         req.setAttribute("product", product);
-        req.setAttribute("images", productDAO.findImages(productId));          // 대표·옆모습·위에서 사진
-        req.setAttribute("info", productDAO.findInfo(productId));              // 원재료·영양성분 (없으면 null)
-        req.setAttribute("showcase", reviewDAO.findCustomShowcase(productId, 8)); // 다른 고객 커스텀 사진
+        req.setAttribute("images", productDAO.findImages(productId));
+        req.setAttribute("info", productDAO.findInfo(productId));
+        req.setAttribute("showcase", reviewDAO.findCustomShowcase(productId, 8));
         req.getRequestDispatcher("/cake/detail.jsp").forward(req, resp);
     }
 }
