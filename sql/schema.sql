@@ -128,3 +128,29 @@ CREATE TABLE banner (
   link_url     VARCHAR(255),
   sort_order   INT NOT NULL DEFAULT 0
 );
+
+-- 상품 사진 여러 장 (대표 · 옆모습 · 위에서 본 모습)
+CREATE TABLE IF NOT EXISTS product_image (
+  image_id    INT AUTO_INCREMENT PRIMARY KEY,
+  product_id  INT NOT NULL,
+  view_type   VARCHAR(10) NOT NULL DEFAULT 'MAIN',        -- MAIN(대표) / SIDE(옆모습) / TOP(위에서)
+  image_url   VARCHAR(255) NOT NULL,
+  sort_order  INT NOT NULL DEFAULT 0,
+  FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
+);
+
+-- 상품 상세 정보 (원재료·원산지·영양성분·알레르기·보관)
+CREATE TABLE IF NOT EXISTS product_info (
+  product_id    INT PRIMARY KEY,
+  ingredients   TEXT,                 -- 원재료와 원산지 (한 줄에 하나: "재료|원산지·설명")
+  allergens     VARCHAR(100),         -- 알레르기 유발 성분 (쉼표로 구분)
+  serving_basis VARCHAR(50),          -- 영양성분 기준 (예: 100g당)
+  kcal          INT,
+  sugar_g       DECIMAL(5,1),
+  protein_g     DECIMAL(5,1),
+  fat_g         DECIMAL(5,1),
+  sat_fat_g     DECIMAL(5,1),
+  sodium_mg     INT,
+  storage       VARCHAR(200),         -- 보관 방법
+  FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
+);
