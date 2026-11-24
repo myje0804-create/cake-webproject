@@ -12,13 +12,9 @@ import com.minecake.dto.ProductImage;
 import com.minecake.dto.ProductInfo;
 import com.minecake.util.DBUtil;
 
-/**
- * ProductDAO — 상품 조회 (예지: 목록·카테고리·정렬·상세)
- * 관리자 상품 등록·수정·삭제(선우)는 이 파일 아래쪽에 메서드를 추가하면 됨
- */
 public class ProductDAO {
 
-    /** 정렬 기준 → SQL ORDER BY (화면에서 온 값을 그대로 SQL에 넣지 않고, 정해진 것만 고름) */
+    /** 정렬 기준 -> SQL ORDER BY */
     private String orderBy(String sort) {
         if (sort == null) sort = "";
         switch (sort) {
@@ -26,16 +22,11 @@ public class ProductDAO {
             case "price_asc":  return "p.price ASC, p.name ASC";
             case "price_desc": return "p.price DESC, p.name ASC";
             case "review":     return "review_count DESC, p.name ASC";
-            default:           return "p.is_best DESC, p.product_id DESC";   // 추천순: Best 먼저, 최신 순
+            default:           return "p.is_best DESC, p.product_id DESC";
         }
     }
 
-    /**
-     * 상품 목록
-     * @param type     CAKE(케이크) / ADDON(추가 상품)
-     * @param category LETTERING, CHARACTER ... (null이나 빈 값이면 전체)
-     * @param sort     name / price_asc / price_desc / review / 그 외(추천순)
-     */
+    /** 상품 목록 (SEASON 선택 시 SEASON 및 SEASON_* 전체 조회) */
     public List<Product> findList(String type, String category, String sort) throws SQLException {
         StringBuilder sql = new StringBuilder(
             "SELECT p.*, IFNULL(r.cnt, 0) AS review_count "
@@ -43,8 +34,15 @@ public class ProductDAO {
           + "LEFT JOIN (SELECT product_id, COUNT(*) AS cnt FROM review WHERE is_hidden = FALSE GROUP BY product_id) r "
           + "  ON p.product_id = r.product_id "
           + "WHERE p.type = ? ");
-        boolean byCategory = category != null && !category.isEmpty();
-        if (byCategory) sql.append("AND p.category = ? ");
+
+        boolean isSeasonAll = "SEASON".equals(category);
+        boolean byCategory = category != null && !category.isEmpty() && !isSeasonAll;
+
+        if (isSeasonAll) {
+            sql.append("AND (p.category = 'SEASON' OR p.category LIKE 'SEASON\\_%') ");
+        } else if (byCategory) {
+            sql.append("AND p.category = ? ");
+        }
         sql.append("ORDER BY ").append(orderBy(sort));
 
         try (Connection conn = DBUtil.getConnection();
@@ -73,7 +71,7 @@ public class ProductDAO {
         }
     }
 
-    /** 상품 사진 여러 장 (대표 → 옆모습 → 위에서 순서) */
+    /** 상품 사진 여러 장 (대표 -> 옆모습 -> 위에서 순서) */
     public List<ProductImage> findImages(int productId) throws SQLException {
         String sql = "SELECT image_id, product_id, view_type, image_url FROM product_image "
                    + "WHERE product_id = ? ORDER BY sort_order, image_id";
@@ -133,7 +131,4 @@ public class ProductDAO {
         p.setReviewCount(rs.getInt("review_count"));
         return p;
     }
-
-    // ---------------- 아래는 관리자 기능(선우) 자리 ----------------
-    // TODO: insert(Product), update(Product), delete(int productId), setBest(int productId, boolean best)
 }
