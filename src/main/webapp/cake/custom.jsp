@@ -2,9 +2,15 @@
 <%@ page import="java.sql.*, java.util.ArrayList, java.util.List, com.minecake.util.DBUtil, com.minecake.util.HtmlUtil" %>
 <%!
     public static class OptionItem {
+        public int id;          // option_id — 장바구니로 보낼 옵션 번호
         public String name;
         public int extra;
+        /** DB에 옵션이 없을 때 쓰는 기본값용 (번호 없음) */
         public OptionItem(String name, int extra) {
+            this(0, name, extra);
+        }
+        public OptionItem(int id, String name, int extra) {
+            this.id = id;
             this.name = name;
             this.extra = extra;
         }
@@ -50,7 +56,7 @@
                 "SELECT option_id, option_type, name, extra_price FROM product_option ORDER BY option_id ASC");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                OptionItem item = new OptionItem(rs.getString("name"), rs.getInt("extra_price"));
+                OptionItem item = new OptionItem(rs.getInt("option_id"), rs.getString("name"), rs.getInt("extra_price"));
                 String type = rs.getString("option_type");
                 if ("SIZE".equals(type)) sizeOpts.add(item);
                 else if ("FLAVOR".equals(type)) flavorOpts.add(item);
@@ -225,6 +231,11 @@
           <input type="hidden" name="productId" value="<%= productId %>">
           <input type="hidden" name="options" id="hiddenOptions" value="">
           <input type="hidden" name="price" id="hiddenPrice" value="<%= basePrice %>">
+          <%-- 장바구니(CartServlet)는 옵션 번호(optionId)로 받아서 서버에서 금액을 다시 계산함 --%>
+          <input type="hidden" name="optionId" id="optSize" value="">
+          <input type="hidden" name="optionId" id="optFlavor" value="">
+          <input type="hidden" name="optionId" id="optColor" value="">
+          <input type="hidden" name="optionId" id="optDeco" value="">
 
           <!-- 1. 크기 선택 -->
           <div class="opt-group">
@@ -233,6 +244,7 @@
               <% for (int i = 0; i < sizeOpts.size(); i++) {
                    OptionItem o = sizeOpts.get(i); %>
                 <button type="button" class="opt-pill <%= i == 0 ? "active" : "" %>"
+                        data-id="<%= o.id %>"
                         data-name="<%= HtmlUtil.escape(o.name) %>"
                         data-extra="<%= o.extra %>">
                   <%= HtmlUtil.escape(o.name) %><%= o.extra > 0 ? " (+" + HtmlUtil.won(o.extra) + "원)" : "" %>
@@ -248,6 +260,7 @@
               <% for (int i = 0; i < flavorOpts.size(); i++) {
                    OptionItem o = flavorOpts.get(i); %>
                 <button type="button" class="opt-pill <%= i == 0 ? "active" : "" %>"
+                        data-id="<%= o.id %>"
                         data-name="<%= HtmlUtil.escape(o.name) %>"
                         data-extra="<%= o.extra %>">
                   <%= HtmlUtil.escape(o.name) %><%= o.extra > 0 ? " (+" + HtmlUtil.won(o.extra) + "원)" : "" %>
@@ -263,6 +276,7 @@
               <% for (int i = 0; i < colorOpts.size(); i++) {
                    OptionItem o = colorOpts.get(i); %>
                 <button type="button" class="opt-pill <%= i == 0 ? "active" : "" %>"
+                        data-id="<%= o.id %>"
                         data-name="<%= HtmlUtil.escape(o.name) %>"
                         data-extra="<%= o.extra %>">
                   <%= HtmlUtil.escape(o.name) %><%= o.extra > 0 ? " (+" + HtmlUtil.won(o.extra) + "원)" : "" %>
@@ -278,6 +292,7 @@
               <% for (int i = 0; i < decoOpts.size(); i++) {
                    OptionItem o = decoOpts.get(i); %>
                 <button type="button" class="opt-pill <%= i == 0 ? "active" : "" %>"
+                        data-id="<%= o.id %>"
                         data-name="<%= HtmlUtil.escape(o.name) %>"
                         data-extra="<%= o.extra %>">
                   <%= HtmlUtil.escape(o.name) %><%= o.extra > 0 ? " (+" + HtmlUtil.won(o.extra) + "원)" : "" %>
@@ -370,9 +385,10 @@
       function getSelected(groupName) {
         const active = document.querySelector('.opt-pills[data-group="' + groupName + '"] .opt-pill.active');
         return active ? {
+          id: active.dataset.id || '',
           name: active.dataset.name,
           extra: parseInt(active.dataset.extra || '0', 10)
-        } : { name: '', extra: 0 };
+        } : { id: '', name: '', extra: 0 };
       }
 
       function updateAll() {
@@ -391,6 +407,12 @@
 
         letteringPreview.textContent = text || 'Happy Day';
         letteringCount.textContent = text.length + ' / 20자 (10자 초과 시 +1,000원)';
+
+        // 장바구니로 보낼 옵션 번호
+        document.getElementById('optSize').value = size.id;
+        document.getElementById('optFlavor').value = flavor.id;
+        document.getElementById('optColor').value = color.id;
+        document.getElementById('optDeco').value = deco.id;
 
         document.getElementById('badgeSize').textContent = size.name;
         document.getElementById('badgeFlavor').textContent = flavor.name;
