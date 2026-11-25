@@ -5,7 +5,7 @@
   margin-top: 80px;
   border-top: 1.5px solid var(--ink);
   background: var(--paper);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   color: var(--ink-soft);
 }
 
@@ -18,17 +18,17 @@
 
 .footer-logo {
   font-family: var(--font-hand);
-  font-size: 30px;
+  font-size: var(--fs-title-md);
   font-weight: 700;
   color: var(--ink);
 }
 .footer-col h4 {
   margin: 0 0 8px;
-  font-size: 14px;
+  font-size: var(--fs-base);
   color: var(--ink);
 }
 .footer-col p, .footer-brand p { margin: 0 0 8px; }
-.footer-phone { font-size: 20px; font-weight: 700; color: var(--ink); }
+.footer-phone { font-size: var(--fs-3xl); font-weight: 700; color: var(--ink); }
 .footer-link { color: var(--orange-dark); font-weight: 700; }
 
 .footer-bottom {

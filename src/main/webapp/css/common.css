@@ -1,27 +1,66 @@
 /* =========================================================
-   common.css — 모든 페이지가 같이 쓰는 색상·폰트·기본 스타일
-   색을 바꾸고 싶으면 :root 안의 값만 바꾸면 사이트 전체가 바뀜
+   common.css — 모든 페이지가 같이 쓰는 색상·글꼴·글자 크기
+   ★ 디자인 리모컨 ★
+   아래 :root 안의 값만 바꾸면 사이트 전체가 한 번에 바뀜 (배치는 그대로)
+   - 글꼴을 바꾸려면: ① 아래 @import 줄의 Google Fonts 주소 ② --font-hand / --font-body 이름
+   - 색·크기를 바꾸려면: 해당 변수 값만 수정
    ========================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&display=swap');
 
 :root {
-  /* 색상 */
-  --cream: #FBF8EE;        /* 바탕 (스케치 노트 색) */
-  --paper: #FFFFFF;        /* 카드 바탕 */
-  --ink: #2B2522;          /* 글자·테두리 */
-  --ink-soft: #7A6E66;     /* 보조 글자 */
+  /* ---------- 1. 기본 색 ---------- */
+  --cream: #FBF8EE;        /* 사이트 바탕 (스케치 노트 색) */
+  --paper: #FFFFFF;        /* 카드·상자 바탕 */
+  --white: #FFFFFF;        /* 주황 버튼·배지 위 글자 */
+  --ink: #2B2522;          /* 기본 글자·테두리 */
+  --ink-soft: #7A6E66;     /* 보조 글자 (설명, 날짜) */
   --line: #E6DFD0;         /* 연한 구분선 */
-  --orange: #EE8A4B;       /* 포인트 (배너 MINE CAKE 글씨) */
-  --orange-dark: #D96F2E;
-  --pink: #F6C9C4;         /* 보조 포인트 */
+  --orange: #EE8A4B;       /* 포인트 (버튼, Best 배지, 배너 제목) */
+  --orange-dark: #D96F2E;  /* 포인트 진하게 (금액, 링크, 레터링 글씨) */
+  --pink: #F6C9C4;         /* 보조 포인트 (배너 바탕) */
 
-  /* 폰트 */
-  --font-hand: 'Gaegu', 'Gowun Dodum', cursive;      /* 로고·제목 (손글씨 느낌) */
-  --font-body: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  /* ---------- 2. 상태 색 (알림·알레르기·성공) ---------- */
+  --success-bg: #E8F5EC;   /* "담았어요" 같은 성공 알림 바탕 */
+  --success: #1F6B41;      /* 성공 알림 글자 */
+  --success-soft: #2F8A57; /* "비밀번호가 일치해요" */
+  --danger-bg: #FCEDEB;    /* 오류 알림·알레르기 바탕 */
+  --danger: #A3352C;       /* 오류 알림·알레르기 글자 */
+  --danger-strong: #C2453B;/* 삭제 버튼에 마우스 올렸을 때 */
+  --danger-line: #E8B4A8;  /* 알레르기 칩 테두리 */
+  --notice-bg: #FDF0E6;    /* 안내 알림 바탕 */
+  --notice: #9A4A16;       /* 안내 알림 글자 */
 
-  /* 크기 */
-  --max-width: 1100px;
-  --radius: 10px;
+  /* ---------- 3. 사진 자리·어두운 막 ---------- */
+  --photo-bg: linear-gradient(135deg, #F8D9CF, #FBEBD9 55%, #F3E2C7);  /* 사진이 없을 때 보이는 바탕 */
+  --overlay: rgba(43, 37, 34, .55);        /* 후기 크게 보기 뒤 어두운 막 */
+  --overlay-strong: rgba(20, 16, 14, .82); /* 사진 크게 보기 뒤 어두운 막 */
+  --chip-dark: rgba(43, 37, 34, .72);      /* 사진 위 검은 글자 띠 */
+
+  /* ---------- 4. 글꼴 ---------- */
+  --font-hand: 'Gaegu', 'Gowun Dodum', cursive;      /* 로고·제목·레터링 (손글씨 느낌) */
+  --font-body: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;  /* 본문 */
+
+  /* ---------- 5. 글자 크기 (작은 것 → 큰 것) ---------- */
+  --fs-2xs: 11px;          /* 사진 설명 띠, 숫자 배지 */
+  --fs-xs: 12px;           /* 작은 안내 문구, 카테고리 이름 */
+  --fs-sm: 13px;           /* 라벨, 로그아웃, 표 머리 */
+  --fs-base: 14px;         /* 일반 글 (설명, 버튼, 표) */
+  --fs-md: 15px;           /* 본문 기본 */
+  --fs-lg: 16px;           /* 카드 상품 이름, 배너 설명 */
+  --fs-xl: 17px;           /* 작은 소제목 (주문 방법 단계, 장바구니 상품명) */
+  --fs-2xl: 18px;          /* 장바구니 금액, 별점, Best 배지 */
+  --fs-lettering: 19px;    /* 레터링 문구 미리보기 */
+  --fs-3xl: 20px;          /* 고객센터 전화번호 */
+  --fs-4xl: 22px;          /* 상세 가격, 섹션 소제목, 영양정보 열량 */
+  --fs-5xl: 24px;          /* 장바구니 합계 금액 */
+  --fs-title-sm: 28px;     /* 헤더 로고, 빈 화면 제목 */
+  --fs-title-md: 30px;     /* 상품 상세 이름, 푸터 로고 */
+  --fs-title: 40px;        /* 페이지 큰 제목 (Best Design, 장바구니, 로그인) */
+  --fs-banner: clamp(44px, 8vw, 88px);  /* 메인 배너 큰 글씨 (화면 크기에 따라) */
+
+  /* ---------- 6. 크기·모서리 ---------- */
+  --max-width: 1100px;     /* 내용 최대 너비 */
+  --radius: 10px;          /* 카드 모서리 둥글기 */
 }
 
 * { box-sizing: border-box; }
@@ -31,7 +70,7 @@ body {
   background: var(--cream);
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: var(--fs-md);
   line-height: 1.6;
 }
 
@@ -50,7 +89,7 @@ button { font-family: inherit; cursor: pointer; }
 /* 섹션 제목 (Best Design, 커스텀 주문 방법 등) */
 .section-title {
   font-family: var(--font-hand);
-  font-size: 40px;
+  font-size: var(--fs-title);
   font-weight: 700;
   text-align: center;
   margin: 0 0 6px;

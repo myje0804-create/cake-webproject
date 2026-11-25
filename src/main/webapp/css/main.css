@@ -22,7 +22,7 @@
   visibility: hidden;
   transition: opacity .6s ease;
   /* 사진이 없을 때 보이는 기본 배경 */
-  background: linear-gradient(135deg, #F8D9CF, #FBEBD9 55%, #F3E2C7);
+  background: var(--photo-bg);
 }
 .banner-slide.active { opacity: 1; visibility: visible; }
 
@@ -34,7 +34,7 @@
   object-fit: cover;
 }
 /* 사진 위 글씨가 잘 보이게 살짝 어둡게 */
-.banner-slide img + .banner-text { text-shadow: 0 2px 12px rgba(0,0,0,.35); color: #fff; }
+.banner-slide img + .banner-text { text-shadow: 0 2px 12px rgba(0,0,0,.35); color: var(--white); }
 
 .banner-text {
   position: relative;
@@ -47,19 +47,19 @@
   color: var(--ink);
 }
 .banner-eyebrow {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   letter-spacing: .2em;
   text-transform: uppercase;
 }
 .banner-title {
   font-family: var(--font-hand);
-  font-size: clamp(44px, 8vw, 88px);
+  font-size: var(--fs-banner);
   font-weight: 700;
   line-height: 1.05;
   color: var(--orange);
   text-wrap: balance;
 }
-.banner-desc { font-size: 16px; }
+.banner-desc { font-size: var(--fs-lg); }
 
 /* 좌우 버튼 */
 .banner-arrow {
@@ -71,11 +71,11 @@
   border: 1.5px solid var(--ink);
   border-radius: 50%;
   background: rgba(255,255,255,.85);
-  font-size: 16px;
+  font-size: var(--fs-lg);
   color: var(--ink);
   z-index: 2;
 }
-.banner-arrow:hover { background: #fff; }
+.banner-arrow:hover { background: var(--white); }
 .banner-arrow.prev { left: 20px; }
 .banner-arrow.next { right: 20px; }
 
@@ -95,7 +95,7 @@
   padding: 0;
   border: 1.5px solid var(--ink);
   border-radius: 50%;
-  background: #fff;
+  background: var(--white);
 }
 .banner-dots button.active { background: var(--ink); }
 
@@ -133,12 +133,12 @@
   left: 10px;
   z-index: 1;
   font-family: var(--font-hand);
-  font-size: 22px;
+  font-size: var(--fs-4xl);
   font-weight: 700;
   color: var(--orange);
   text-shadow: 0 0 6px rgba(255,255,255,.9);
 }
-.cake-name { margin-top: 10px; font-weight: 700; font-size: 16px; }
+.cake-name { margin-top: 10px; font-weight: 700; font-size: var(--fs-lg); }
 .cake-price { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 
 .center-btn { margin-top: 32px; text-align: center; }
@@ -168,8 +168,8 @@
   border-radius: var(--radius);
   background: var(--cream);
 }
-.howto-steps h3 { margin: 10px 0 6px; font-size: 17px; }
-.howto-steps p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+.howto-steps h3 { margin: 10px 0 6px; font-size: var(--fs-xl); }
+.howto-steps p { margin: 0; font-size: var(--fs-base); color: var(--ink-soft); }
 
 .step-no {
   display: grid;
@@ -178,9 +178,9 @@
   height: 36px;
   border-radius: 50%;
   background: var(--orange);
-  color: #fff;
+  color: var(--white);
   font-family: var(--font-hand);
-  font-size: 22px;
+  font-size: var(--fs-4xl);
   font-weight: 700;
 }
 
@@ -217,11 +217,11 @@
 .review-photo img { width: 100%; height: 100%; object-fit: cover; }
 
 .review-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.review-stars { color: var(--line); font-size: 18px; letter-spacing: 2px; }
+.review-stars { color: var(--line); font-size: var(--fs-2xl); letter-spacing: 2px; }
 .review-stars .on { color: var(--orange); }
 .review-cake { font-weight: 700; }
-.review-text { margin: 4px 0; font-size: 14px; color: var(--ink-soft); }
-.review-writer { font-size: 13px; color: var(--ink-soft); margin-top: auto; }
+.review-text { margin: 4px 0; font-size: var(--fs-base); color: var(--ink-soft); }
+.review-writer { font-size: var(--fs-sm); color: var(--ink-soft); margin-top: auto; }
 
 /* ---------- 휴대폰·태블릿 ---------- */
 @media (max-width: 900px) {
