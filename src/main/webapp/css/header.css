@@ -22,7 +22,7 @@
   align-items: center;
   gap: 6px;
   font-family: var(--font-hand);
-  font-size: 28px;
+  font-size: var(--fs-title-sm);
   font-weight: 700;
   white-space: nowrap;
 }
@@ -38,7 +38,7 @@
   padding: 5px 14px;
   border: 1.5px solid var(--ink);
   border-radius: 4px;
-  font-size: 14px;
+  font-size: var(--fs-base);
   font-weight: 700;
   background: var(--paper);
   transition: background .2s, color .2s;
@@ -71,13 +71,13 @@
   padding: 0 4px;
   border-radius: 9px;
   background: var(--orange);
-  color: #fff;
-  font-size: 11px;
+  color: var(--white);
+  font-size: var(--fs-2xs);
   font-weight: 700;
   line-height: 18px;
   text-align: center;
 }
-.logout-link { font-size: 13px; color: var(--ink-soft); margin-left: 4px; }
+.logout-link { font-size: var(--fs-sm); color: var(--ink-soft); margin-left: 4px; }
 
 /* 화면 읽기 프로그램용 글자 (눈에는 안 보임) */
 .sr-only {
@@ -90,8 +90,8 @@
   .header-inner { flex-wrap: wrap; height: auto; padding-block: 10px; gap: 10px; }
   .header-icons { margin-left: auto; }
   .main-nav { order: 3; width: 100%; margin-left: 0; overflow-x: auto; }
-  .main-nav a { white-space: nowrap; font-size: 13px; padding: 4px 10px; }
+  .main-nav a { white-space: nowrap; font-size: var(--fs-sm); padding: 4px 10px; }
 }
 
 /* 로그인한 사람 이름 */
-.hello { font-size: 13px; font-weight: 700; margin-left: 4px; white-space: nowrap; }
+.hello { font-size: var(--fs-sm); font-weight: 700; margin-left: 4px; white-space: nowrap; }
