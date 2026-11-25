@@ -9,13 +9,13 @@
   margin: 0 auto 24px;
   padding: 10px 16px;
   border-radius: 999px;
-  background: #E8F5EC;
-  color: #1F6B41;
+  background: var(--success-bg);
+  color: var(--success);
   text-align: center;
-  font-size: 14px;
+  font-size: var(--fs-base);
   font-weight: 700;
 }
-.cart-toast-error { background: #FCEDEB; color: #A3352C; }
+.cart-toast-error { background: var(--danger-bg); color: var(--danger); }
 
 /* 빈 장바구니 */
 .cart-empty {
@@ -27,7 +27,7 @@
   background: var(--paper);
   text-align: center;
 }
-.cart-empty-title { margin: 0 0 4px; font-family: var(--font-hand); font-size: 30px; font-weight: 700; }
+.cart-empty-title { margin: 0 0 4px; font-family: var(--font-hand); font-size: var(--fs-title-md); font-weight: 700; }
 .cart-empty p { color: var(--ink-soft); margin: 0 0 20px; }
 
 /* 목록 + 요약 */
@@ -59,11 +59,11 @@
 .cart-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
 .cart-info { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.cart-name { font-size: 17px; font-weight: 700; }
+.cart-name { font-size: var(--fs-xl); font-weight: 700; }
 .cart-name:hover { color: var(--orange-dark); }
-.cart-info p { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.cart-info p { margin: 0; font-size: var(--fs-base); overflow-wrap: anywhere; }
 .cart-options { color: var(--ink-soft); }
-.cart-lettering { font-family: var(--font-hand); font-size: 19px !important; color: var(--orange-dark); }
+.cart-lettering { font-family: var(--font-hand); font-size: var(--fs-lettering) !important; color: var(--orange-dark); }
 .cart-lettering span, .cart-request span {
   display: inline-block;
   margin-right: 6px;
@@ -72,7 +72,7 @@
   background: var(--cream);
   border: 1px solid var(--line);
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   color: var(--ink-soft);
   vertical-align: middle;
 }
@@ -82,7 +82,7 @@
 .cart-actions { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: 10px; }
 
 .qty-form { display: flex; align-items: center; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
-.qty-btn { width: 34px; height: 34px; border: 0; background: var(--paper); font-size: 18px; color: var(--ink); }
+.qty-btn { width: 34px; height: 34px; border: 0; background: var(--paper); font-size: var(--fs-2xl); color: var(--ink); }
 .qty-btn:hover { background: var(--cream); }
 .qty-input {
   width: 40px; height: 34px; border: 0; text-align: center;
@@ -91,9 +91,9 @@
 }
 .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-.cart-line-total { margin: 0; font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
-.delete-btn { border: 0; background: none; color: var(--ink-soft); font-size: 13px; text-decoration: underline; padding: 0; }
-.delete-btn:hover { color: #C2453B; }
+.cart-line-total { margin: 0; font-size: var(--fs-2xl); font-weight: 700; font-variant-numeric: tabular-nums; }
+.delete-btn { border: 0; background: none; color: var(--ink-soft); font-size: var(--fs-sm); text-decoration: underline; padding: 0; }
+.delete-btn:hover { color: var(--danger-strong); }
 
 /* 결제 요약 */
 .cart-summary {
@@ -107,14 +107,14 @@
   flex-direction: column;
   gap: 10px;
 }
-.cart-summary h2 { margin: 0 0 6px; font-size: 17px; }
-.summary-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink-soft); }
+.cart-summary h2 { margin: 0 0 6px; font-size: var(--fs-xl); }
+.summary-row { display: flex; justify-content: space-between; font-size: var(--fs-base); color: var(--ink-soft); }
 .summary-total {
   display: flex; justify-content: space-between; align-items: baseline;
   margin: 6px 0 8px; padding-top: 12px; border-top: 1px solid var(--line);
 }
-.summary-total strong { font-size: 24px; color: var(--orange-dark); font-variant-numeric: tabular-nums; }
-.summary-note { margin: 4px 0 0; font-size: 12px; color: var(--ink-soft); text-align: center; }
+.summary-total strong { font-size: var(--fs-5xl); color: var(--orange-dark); font-variant-numeric: tabular-nums; }
+.summary-note { margin: 4px 0 0; font-size: var(--fs-xs); color: var(--ink-soft); text-align: center; }
 .btn-block { display: block; width: 100%; text-align: center; }
 
 @media (max-width: 860px) {
