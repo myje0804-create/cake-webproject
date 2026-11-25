@@ -8,6 +8,7 @@ import java.util.Map;
 import com.minecake.dao.ProductDAO;
 import com.minecake.dao.ReviewDAO;
 import com.minecake.dto.Product;
+import com.minecake.dto.ProductInfo;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -113,7 +114,11 @@ public class CakeServlet extends HttpServlet {
         int productId = product.getProductId();
         req.setAttribute("product", product);
         req.setAttribute("images", productDAO.findImages(productId));
-        req.setAttribute("info", productDAO.findInfo(productId));
+        ProductInfo info = productDAO.findInfo(productId);
+        if (info == null && "CAKE".equals(product.getType())) {
+            info = ProductInfo.defaultFor(productId, product.getCategory()); // DB에 없으면 기본 레시피 정보
+        }
+        req.setAttribute("info", info);
         req.setAttribute("showcase", reviewDAO.findCustomShowcase(productId, 8));
         req.getRequestDispatcher("/cake/detail.jsp").forward(req, resp);
     }

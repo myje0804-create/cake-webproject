@@ -46,6 +46,32 @@ public class ProductInfo {
         return kcal != null || sugarG != null || proteinG != null || fatG != null || sodiumMg != null;
     }
 
+    /**
+     * DB(product_info)에 정보가 없는 케이크에 보여줄 기본 정보
+     * 같은 시트·크림을 쓰는 케이크는 원재료·영양성분이 거의 같아서, 카테고리별 기본 레시피 값을 사용
+     *   FLOWER(플라워/앙금) → 앙금·쌀 시트 레시피
+     *   그 외               → 생크림·우리밀 시트 레시피
+     */
+    public static ProductInfo defaultFor(int productId, String category) {
+        ProductInfo info = new ProductInfo();
+        info.setProductId(productId);
+        info.setServingBasis("100g당 · 기본 레시피 기준");
+        if ("FLOWER".equals(category)) {
+            info.setIngredients("앙금|국산 백앙금(흰강낭콩)\n쌀가루|국산 멥쌀\n동물성 생크림|국산 1등급 원유 100%\n설탕|국산 비정제 원당\n꽃 색소|천연 색소(비트·치자·단호박)");
+            info.setAllergens("우유");
+            info.setKcal(270); info.setSugarG(30.2); info.setProteinG(4.2);
+            info.setFatG(9.8); info.setSatFatG(6.1); info.setSodiumMg(60);
+            info.setStorage("냉장(0~5℃) 보관, 앙금 꽃은 상온에 오래 두면 녹아요");
+        } else {
+            info.setIngredients("동물성 생크림|국산 1등급 원유 100%\n밀가루|국산 우리밀\n계란|국산 무항생제 동물복지란\n무염버터|프랑스산\n설탕|국산 비정제 원당\n레터링·장식 크림|버터크림·천연 색소");
+            info.setAllergens("우유, 계란, 밀");
+            info.setKcal(305); info.setSugarG(22.5); info.setProteinG(4.9);
+            info.setFatG(19.2); info.setSatFatG(12.0); info.setSodiumMg(105);
+            info.setStorage("냉장(0~5℃) 보관, 픽업 당일 드시는 걸 권장해요");
+        }
+        return info;
+    }
+
     public int getProductId() { return productId; }
     public void setProductId(int productId) { this.productId = productId; }
 
