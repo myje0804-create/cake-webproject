@@ -7,6 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.sql.*;
+import java.util.*;
+
 import com.minecake.dto.Product;
 import com.minecake.dto.ProductImage;
 import com.minecake.dto.ProductInfo;
@@ -130,5 +136,110 @@ public class ProductDAO {
         p.setBest(rs.getBoolean("is_best"));
         p.setReviewCount(rs.getInt("review_count"));
         return p;
+    }
+
+    // ---------------- 아래는 관리자 기능(선우) 자리 ----------------
+    // TODO: insert(Product), update(Product), delete(int productId), setBest(int productId, boolean best)
+
+    public void insert(Connection conn, Product product) throws SQLException { //케이크 데이터 삽입
+     String sql = "insert into Product (type, category, name, price, description, image_url, is_best) "
+                   + "values (?,?,?,?,?,?,?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, product.getType());
+            pstmt.setString(2, product.getCategory());
+            pstmt.setString(3, product.getName());
+            pstmt.setInt(4, product.getPrice());
+            pstmt.setString(5, product.getDescription());
+            pstmt.setString(6, product.getImageUrl());  
+            pstmt.setBoolean(7, product.getBest());
+            //pstmt.setTimestamp(8, Timestamp.valueOf(product.getCreatedAt()));
+            pstmt.executeUpdate();
+        }
+    }
+	
+    public Product selectById(Connection conn, int productId) throws SQLException {
+        Product product = null;
+        String sql = "select * from Product where product_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, productId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    product = new Product();
+                    product.setProductId(rs.getInt(1));
+                product.setType(rs.getString(2));
+                product.setCategory(rs.getString(3));
+                product.setName(rs.getString(4));
+                product.setPrice(rs.getInt(5));
+                product.setDescription(rs.getString(6));
+                product.setImageUrl(rs.getString(7));
+                product.setBest(rs.getBoolean(8));
+                Timestamp ts = rs.getTimestamp(9);
+                if (ts != null) product.setCreatedAt(ts.toLocalDateTime());
+                }
+            }
+        }
+        return product;
+    }
+	
+	
+	
+	
+    public void update(Connection conn, Product product) throws SQLException {  //케이크 정보 업데이트
+        String sql = "update Product set type=?, category=?, name=?, price=?, "
+                + " description=?, image_url=?, is_best=?, created_at=? where product_id =?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, product.getType());
+            pstmt.setString(2, product.getCategory());
+            pstmt.setString(3, product.getName());
+            pstmt.setInt(4, product.getPrice());
+            pstmt.setString(5, product.getDescription());
+            pstmt.setString(6, product.getImageUrl());  
+            pstmt.setBoolean(7, product.getBest());
+            LocalDateTime createdAt = (product.getCreatedAt() != null)
+                    ? product.getCreatedAt()
+                    : LocalDateTime.now();
+            pstmt.setTimestamp(8, Timestamp.valueOf(createdAt));
+           
+            pstmt.setInt(9, product.getProductId());
+            pstmt.executeUpdate();
+        }
+    }
+
+	
+	public void deleteById(Connection conn, int productId) throws SQLException { //케이크 정보 삭제
+    String sql = "delete from Product where product_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, productId);
+            pstmt.executeUpdate();
+        }
+    }
+	
+	public List<Product> selectList(Connection conn) throws SQLException {  //케이크 관리 리스트 출력용 
+        List<Product> productList = new ArrayList<>();
+        String sql = "select * from product";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getInt(1));
+                product.setType(rs.getString(2));
+                product.setCategory(rs.getString(3));
+                product.setName(rs.getString(4));
+                product.setPrice(rs.getInt(5));
+                product.setDescription(rs.getString(6));
+                product.setImageUrl(rs.getString(7));
+                product.setBest(rs.getBoolean(8));
+                Timestamp ts = rs.getTimestamp(9);
+                if (ts != null) product.setCreatedAt(ts.toLocalDateTime());
+                productList.add(product);
+            }
+        }
+        return productList;
     }
 }

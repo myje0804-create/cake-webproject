@@ -7,4 +7,17 @@
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <servlet-name>productUpload</servlet-name>
+    <jsp-file>/admin/productUpload.jsp</jsp-file>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size>
+      <max-request-size>20971520</max-request-size>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>productUpload</servlet-name>
+    <url-pattern>/admin/productUpload.jsp</url-pattern>
+  </servlet-mapping>
+  <!-- ★ 여기까지 추가 -->
 </web-app>
