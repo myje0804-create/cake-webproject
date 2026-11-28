@@ -18,7 +18,7 @@
 %>
 <%
     String ctx = request.getContextPath();
-    int productId = 1;
+    int productId = 11;
     try {
         String idParam = request.getParameter("id");
         if (idParam != null && !idParam.trim().isEmpty()) {
@@ -28,8 +28,8 @@
 
     String productName = "나만의 커스텀 케이크";
     String productDesc = "원하는 크기와 맛, 크림 색상, 레터링 문구를 직접 조합해 보세요.";
-    String productImg = null;
-    int basePrice = 18000;
+    String productImg = "/images/cakes/couple_3.jpg";
+    int basePrice = 28000;
 
     List<OptionItem> sizeOpts = new ArrayList<>();
     List<OptionItem> flavorOpts = new ArrayList<>();
@@ -38,15 +38,33 @@
 
     try (Connection conn = DBUtil.getConnection()) {
         // 1. 케이크 기본 정보 조회
+        boolean found = false;
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT name, price, description, image_url FROM product WHERE product_id = ?")) {
+                "SELECT product_id, name, price, description, image_url FROM product WHERE product_id = ?")) {
             ps.setInt(1, productId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    found = true;
+                    productId = rs.getInt("product_id");
                     productName = rs.getString("name");
                     basePrice = rs.getInt("price");
                     if (rs.getString("description") != null) productDesc = rs.getString("description");
-                    productImg = rs.getString("image_url");
+                    if (rs.getString("image_url") != null) productImg = rs.getString("image_url");
+                }
+            }
+        }
+
+        // 해당 ID가 없으면 등록된 첫 번째 CAKE 상품 자동 조회
+        if (!found) {
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "SELECT product_id, name, price, description, image_url FROM product WHERE type = 'CAKE' ORDER BY product_id ASC LIMIT 1");
+                 ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    productId = rs.getInt("product_id");
+                    productName = rs.getString("name");
+                    basePrice = rs.getInt("price");
+                    if (rs.getString("description") != null) productDesc = rs.getString("description");
+                    if (rs.getString("image_url") != null) productImg = rs.getString("image_url");
                 }
             }
         }
@@ -107,7 +125,7 @@
     .custom-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 44px; align-items: start; }
     @media (max-width: 860px) { .custom-grid { grid-template-columns: 1fr; } }
 
-    /* 왼쪽 실시간 케이크 미리보기 */
+    /* 왼쪽 실시간 케이크 미리보기 (실제 케이크 사진 위에 선택 색상·문구 겹침 방식) */
     .preview-card {
       position: sticky; top: 96px;
       background: #FAF8F5; border: 1px solid #E5DDD3; border-radius: 18px; padding: 28px;
@@ -116,26 +134,50 @@
     .preview-stage {
       position: relative; width: 100%; aspect-ratio: 1 / 1; max-width: 360px; margin: 0 auto 18px;
       border-radius: 16px; background: #F2EFE9; border: 1px solid #E6DFD5;
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      overflow: hidden; box-shadow: 0 10px 24px rgba(44, 42, 41, 0.08);
     }
+    /* 실제 케이크 사진 선명하게 표시 */
     .preview-stage img.base-photo {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.25;
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.25s ease;
     }
-    .cake-mockup {
-      position: relative; z-index: 2; width: 220px; height: 220px; border-radius: 50%;
-      background: #FFFDF9; border: 8px solid #F3ECE2;
-      box-shadow: 0 12px 28px rgba(44, 42, 41, 0.12), inset 0 0 0 3px rgba(255,255,255,0.7);
+    /* 선택한 크림 색상을 사진 위에 자연스럽게 겹치는 레이어 */
+    .color-tint-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background-color: transparent;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      transition: background-color 0.25s ease;
+    }
+    /* 케이크 사진 위에 겹쳐지는 레터링 & 테두리 장식 오버레이 */
+    .cake-overlay-box {
+      position: absolute; inset: 18px; z-index: 2; border-radius: 50%;
+      border: 6px solid transparent;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 22px; transition: all 0.25s ease;
+      padding: 24px; pointer-events: none; transition: all 0.25s ease;
     }
-    .cake-mockup.deco-bead { border-style: dotted; border-width: 10px; }
-    .cake-mockup.deco-shell { border-style: double; border-width: 11px; }
-    .cake-mockup.deco-heart::after {
-      content: "♥   ♥   ♥"; position: absolute; bottom: 18px; font-size: 12px; color: #B57C84; letter-spacing: 3px;
+    .cake-overlay-box.deco-bead {
+      border-style: dotted; border-width: 9px; border-color: rgba(255, 253, 249, 0.9);
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.08);
+    }
+    .cake-overlay-box.deco-shell {
+      border-style: double; border-width: 10px; border-color: rgba(255, 253, 249, 0.9);
+      box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.08);
+    }
+    .cake-overlay-box.deco-heart::after {
+      content: "♥   ♥   ♥"; position: absolute; bottom: 16px; font-size: 15px;
+      color: #D9536F; text-shadow: 0 1px 4px rgba(255, 255, 255, 0.95); letter-spacing: 4px;
     }
     .cake-lettering-preview {
-      font-family: Georgia, 'Nanum Myeongjo', serif; font-size: 17px; font-weight: 700;
-      color: #4A3B32; word-break: keep-all; line-height: 1.4; max-width: 160px;
+      font-family: Georgia, 'Nanum Myeongjo', serif; font-size: 19px; font-weight: 700;
+      color: #3B2820; word-break: keep-all; line-height: 1.4; max-width: 220px;
+      background: rgba(255, 253, 249, 0.84); backdrop-filter: blur(2px);
+      padding: 8px 15px; border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.14);
+      transition: all 0.2s ease;
+    }
+    .cake-lettering-preview.is-placeholder {
+      color: #7A6B63; font-weight: 600;
     }
     .preview-badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 10px; }
     .preview-badge {
@@ -155,6 +197,7 @@
     .opt-group:last-of-type { border-bottom: none; margin-bottom: 12px; }
     .opt-label { display: flex; justify-content: space-between; font-size: 15px; font-weight: 600; color: #2C2A29; margin-bottom: 10px; }
     .opt-hint { font-size: 12px; font-weight: 400; color: #8A8179; }
+    .opt-hint.is-paid { color: #B57C84; font-weight: 600; }
 
     .opt-pills { display: flex; flex-wrap: wrap; gap: 8px; }
     .opt-pill {
@@ -205,10 +248,11 @@
       <aside class="preview-card">
         <div class="preview-stage">
           <% if (productImg != null) { %>
-            <img class="base-photo" src="<%= ctx + productImg %>" alt="" onerror="this.remove()">
+            <img class="base-photo" src="<%= ctx + productImg %>" alt="<%= HtmlUtil.escape(productName) %>" onerror="this.remove()">
           <% } %>
-          <div class="cake-mockup" id="cakeMockup">
-            <div class="cake-lettering-preview" id="letteringPreview">Happy Day</div>
+          <div class="color-tint-overlay" id="colorTintOverlay"></div>
+          <div class="cake-overlay-box" id="cakeMockup">
+            <div class="cake-lettering-preview is-placeholder" id="letteringPreview">Happy Day</div>
           </div>
         </div>
 
@@ -218,7 +262,7 @@
           <span class="preview-badge" id="badgeColor"></span>
           <span class="preview-badge" id="badgeDeco"></span>
         </div>
-        <p class="preview-caption">선택하신 크림 색상·장식·레터링 문구가 실시간으로 반영돼요.</p>
+        <p class="preview-caption">케이크 사진 위에 선택하신 크림 색상과 레터링 문구가 실시간으로 겹쳐 표시돼요.</p>
       </aside>
 
       <!-- ================= 오른쪽: 옵션 선택 및 주문 폼 ================= -->
@@ -305,7 +349,7 @@
           <div class="opt-group">
             <div class="opt-label">
               <span>5. 케이크 레터링 문구</span>
-              <span class="opt-hint" id="letteringCount">0 / 20자 (10자 초과 시 +1,000원)</span>
+              <span class="opt-hint" id="letteringCount">0 / 20자 (10자까지 무료)</span>
             </div>
             <input type="text" name="lettering" id="letteringInput" class="custom-input"
                    maxlength="20" placeholder="예: 생일 축하해 소은! (최대 20자)">
@@ -358,6 +402,7 @@
     (function() {
       const basePrice = <%= basePrice %>;
       const mockup = document.getElementById('cakeMockup');
+      const colorOverlay = document.getElementById('colorTintOverlay');
       const letteringInput = document.getElementById('letteringInput');
       const letteringPreview = document.getElementById('letteringPreview');
       const letteringCount = document.getElementById('letteringCount');
@@ -372,14 +417,20 @@
       pickupDate.min = tomorrow;
       pickupDate.value = tomorrow;
 
+      // 크림 색상명 → 사진 위에 겹칠 반투명 색상 매핑
       const colorMap = {
-        '화이트': '#FFFDF9',
-        '파스텔 핑크': '#FADADD',
-        '세이지 그린': '#DCE8DF',
-        '민트': '#DDF0EA',
-        '레몬 옐로우': '#FDF3C7',
-        '라벤더': '#E6DFF2',
-        '초코': '#7B5846'
+        '화이트': 'transparent',
+        '아이보리': 'rgba(255, 248, 225, 0.45)',
+        '파스텔 핑크': 'rgba(255, 182, 193, 0.48)',
+        '핑크': 'rgba(255, 182, 193, 0.48)',
+        '세이지 그린': 'rgba(178, 211, 188, 0.50)',
+        '민트': 'rgba(170, 232, 213, 0.48)',
+        '하늘색': 'rgba(173, 216, 230, 0.50)',
+        '스카이 블루': 'rgba(173, 216, 230, 0.50)',
+        '레몬 옐로우': 'rgba(255, 238, 153, 0.50)',
+        '옐로우': 'rgba(255, 238, 153, 0.50)',
+        '라벤더': 'rgba(216, 191, 238, 0.50)',
+        '초코': 'rgba(123, 88, 70, 0.52)'
       };
 
       function getSelected(groupName) {
@@ -399,16 +450,29 @@
         const text = letteringInput.value.trim();
         const qty = Math.max(1, parseInt(qtyInput.value || '1', 10));
 
-        mockup.style.backgroundColor = colorMap[color.name] || '#FFFDF9';
+        // 1. 사진 위 색상 겹침 반영
+        colorOverlay.style.backgroundColor = colorMap[color.name] || 'transparent';
+
+        // 2. 사진 위 테두리 장식 반영
         mockup.classList.remove('deco-bead', 'deco-shell', 'deco-heart');
         if (deco.name.includes('구슬')) mockup.classList.add('deco-bead');
         else if (deco.name.includes('조개')) mockup.classList.add('deco-shell');
         else if (deco.name.includes('하트')) mockup.classList.add('deco-heart');
 
-        letteringPreview.textContent = text || 'Happy Day';
-        letteringCount.textContent = text.length + ' / 20자 (10자 초과 시 +1,000원)';
+        // 3. 레터링 문구 및 글자 수 표시 반영
+        if (text) {
+          letteringPreview.textContent = text;
+          letteringPreview.classList.remove('is-placeholder');
+        } else {
+          letteringPreview.textContent = 'Happy Day';
+          letteringPreview.classList.add('is-placeholder');
+        }
 
-        // 장바구니로 보낼 옵션 번호
+        const isPaidLettering = text.length > 10;
+        letteringCount.textContent = text.length + ' / 20자' + (isPaidLettering ? ' (+1,000원 적용)' : ' (10자 초과 시 +1,000원)');
+        letteringCount.classList.toggle('is-paid', isPaidLettering);
+
+        // 4. 장바구니로 보낼 옵션 번호
         document.getElementById('optSize').value = size.id;
         document.getElementById('optFlavor').value = flavor.id;
         document.getElementById('optColor').value = color.id;
@@ -419,7 +483,8 @@
         document.getElementById('badgeColor').textContent = color.name;
         document.getElementById('badgeDeco').textContent = deco.name;
 
-        const letteringExtra = text.length > 10 ? 1000 : 0;
+        // 5. 총 금액 계산
+        const letteringExtra = isPaidLettering ? 1000 : 0;
         const unitPrice = basePrice + size.extra + flavor.extra + color.extra + deco.extra + letteringExtra;
         const total = unitPrice * qty;
 
