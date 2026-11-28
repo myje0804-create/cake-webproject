@@ -44,7 +44,7 @@
       border-radius: 999px;
       border: 1px solid var(--line);
       background: var(--cream);
-      font-size: 13px;
+      font-size: var(--fs-sm);
       font-weight: 600;
       color: var(--ink-soft);
       transition: all .15s;
@@ -53,7 +53,7 @@
     .sub-category-tabs a.active {
       background: var(--orange);
       border-color: var(--orange);
-      color: #fff;
+      color: var(--on-accent);
     }
   </style>
 </head>
