@@ -39,4 +39,48 @@
   background-color: #ffffff   ;
   text-align : center ;
 }
-.registerCake{}
+
+textarea {
+            width: 100%;
+            border-radius: 12px;
+            resize: none;
+            box-sizing: border-box;
+            padding: 12px;
+            font: inherit;
+            font-size: 20px;
+            background-color: #f7f7c8;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #ffd2d9;
+          	
+        }
+
+        .aiAnswer, .aiError {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .aiError {
+            color: #b00020;
+        }
+        .aiSection-title{
+        	text-align: center;
+        	font-size: 40px;
+ 			color :#978ff9;
+        	padding: 20px
+        }
+        .aibtn-style{
+        	text-align: center;
+        	padding : 10px;
+        }
+		#aiSend{
+			font-size : 20px;
+					
+		}
