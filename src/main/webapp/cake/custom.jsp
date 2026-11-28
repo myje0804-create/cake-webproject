@@ -514,6 +514,22 @@
 
       updateAll();
     })();
+    document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(location.search);
+  const lettering = params.get("lettering");
+  if (!lettering) return;
+
+  const inputEl = document.getElementById("letteringInput");     // 실제 레터링 입력창 id로 변경
+  const previewEl = document.getElementById("letteringPreview"); // 실제 미리보기 문구 id로 변경
+
+  if (inputEl) {
+    inputEl.value = lettering;
+    inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+  if (previewEl) {
+    previewEl.textContent = lettering;
+  }
+});
   </script>
 </body>
 </html>

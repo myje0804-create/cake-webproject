@@ -138,7 +138,7 @@
           </ul>
           <div class="detail-actions">
             <a href="<%= ctx %>/cake/custom.jsp?id=<%= p.getProductId() %>" class="btn btn-orange btn-block">커스텀 주문하기</a>
-            <a href="<%= ctx %>/ai/aiCake.jsp" class="btn btn-block">AI에게 디자인 추천받기</a>
+            <a href="<%= ctx %>/ai/aiCake.jsp?id=<%= p.getProductId() %>" class="btn btn-block">AI에게 디자인 추천받기</a>
           </div>
           <p class="detail-note">표시된 가격은 도시락 크기 기본가예요. 옵션에 따라 금액이 달라져요.</p>
         <% } else { %>
