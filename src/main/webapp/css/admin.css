@@ -1,1 +1,42 @@
 /* admin.css — 역할 C 담당 화면 전용 스타일. 색·폰트는 common.css 변수(var(--orange) 등)만 사용 */
+#mylist{
+    width : 1200px;
+    border : 2px solid black;
+    padding : 3 ;
+    margin: 0 auto;
+}
+
+
+#mylist td {
+  border: 1px solid black;
+  padding: 8px 10px;
+  font-size: 14px;        
+  color: #333333;         
+  text-align: center;     
+  vertical-align: middle; 
+  background-color: #ffffff;  
+}
+#mylist th {
+    border: 1px solid black;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #ffffff; 
+    text-align: center;
+    vertical-align: middle;  /* 배경색 (선택) */
+    white-space: nowrap;
+}
+.tablestyle {
+   width: 100%;
+   margin: 0 auto;
+   padding-left: 0;
+}
+
+#uploadProductbtn {
+  padding: 10px 22px;         
+  font-size: 15px;            
+  font-weight: 600;            
+  color: #000000;              
+  background-color: #ffffff   ;
+  text-align : center ;
+}
+.registerCake{}
