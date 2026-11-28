@@ -38,6 +38,8 @@
       <p class="cart-toast">장바구니에 담았어요.</p>
     <% } else if ("deleted".equals(msg)) { %>
       <p class="cart-toast">장바구니에서 뺐어요.</p>
+    <% } else if ("empty".equals(msg)) { %>
+      <p class="cart-toast cart-toast-error">장바구니가 비어 있어서 주문할 수 없어요.</p>
     <% } else if ("noProduct".equals(msg)) { %>
       <p class="cart-toast cart-toast-error">없는 상품이에요. 상품 목록에서 다시 골라 주세요.</p>
     <% } %>
@@ -107,7 +109,7 @@
         <div class="summary-row"><span>상품 <%= items.size() %>건</span><span><%= HtmlUtil.won(total) %>원</span></div>
         <div class="summary-row"><span>픽업</span><span>매장 방문 (무료)</span></div>
         <div class="summary-total"><span>합계</span><strong><%= HtmlUtil.won(total) %>원</strong></div>
-        <a href="<%= ctx %>/cart/checkout.jsp" class="btn btn-orange btn-block">주문하기</a>
+        <a href="<%= ctx %>/order?action=checkout" class="btn btn-orange btn-block">주문하기</a>
         <a href="<%= ctx %>/cake/list.jsp" class="btn btn-block">케이크 더 담기</a>
         <p class="summary-note">픽업 날짜와 시간은 다음 단계에서 골라요.</p>
       </aside>
